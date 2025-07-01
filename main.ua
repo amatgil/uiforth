@@ -1,3 +1,4 @@
+# Experimental!
 #         __            _   _
 #  _   _ / _| ___  _ __| |_| |__
 # | | | | |_ / _ \| '__| __| '_ \
@@ -22,13 +23,13 @@
 #           backslashes mask _those_ out with `find $ \"`
 
 ┌─╴Word
-  |N {Num}    # number (f64)
-  |W {Word}   # identifier for word
-  |S {String} # quoted string
+  |N {Num: °0type}    # number (f64)
+  |W {Word: °1type}   # identifier for word
+  |S {String: °1type} # quoted string
 └─╴
 ┌─╴Val
-  |N {Num}    # number (f64)
-  |S {String} # string
+  |N {Num: °0type}    # number (f64)
+  |S {String: °1type} # string
 └─╴
 
 # Stack ? Word Stack
