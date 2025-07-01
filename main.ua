@@ -37,7 +37,8 @@ RunBuiltIn ← |2 ⍣(
   ⍩(⊂Val~N) °(Word~N)
 | ⍩(⊂ ⍜∩°Val~N+ °⊟ ⊃↙↘2) °(Word~W"+")
 | ⍩(⊂ ⍜∩°Val~N- °⊟ ⊃↙↘2) °(Word~W"-")
-| ⍤$"Unrecognized word: _" ⊙0)
+| ⍤$"Cannot run string: _" ⊙0 °(Word~S)
+| ⍤$"Unrecognized word: _" ⊙0 °(Word~W))
 
 # Dict Stack ? Word Dict Stack
 EvalWord ← (
