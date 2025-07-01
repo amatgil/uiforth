@@ -37,6 +37,10 @@ RunBuiltIn ← |2 ⍣(
   ⍩(⊂Val~N) °(Word~N)
 | ⍩(⊂ ⍜∩°Val~N+ °⊟ ⊃↙↘2) °(Word~W"+")
 | ⍩(⊂ ⍜∩°Val~N- °⊟ ⊃↙↘2) °(Word~W"-")
+| ⍩(⊂ ⍜∩°Val~N× °⊟ ⊃↙↘2) °(Word~W"*")
+| ⍩(⊂ ⍜∩°Val~N÷ °⊟ ⊃↙↘2) °(Word~W"/")
+| ⍩(⊂⊂. ⊃↙↘1) °(Word~W"dup")
+| ⍩(&p ⍣(°Val~N|°Val~S) ⊃⊢↘₁) °(Word~W"print")
 | ⍤$"Cannot run string: _" ⊙0 °(Word~S)
 | ⍤$"Unrecognized word: _" ⊙0 °(Word~W))
 
@@ -46,11 +50,12 @@ EvalWord ← (
   [] RunBuiltIn
 )
 # Dict Stack ? Words Dict Stack
-Eval ← |3.2 ∧EvalWord ⊙¤
+Eval ← ∧EvalWord ⊙¤
 
 # Words ? Input
 Parse ← ⊜(⍣(Word~N ⋕|Word~W))¬⊸∊" \n" # TODO: Parse strings
 
 EmptyStack ← ↯0_2 []
-Eval Parse "10 12 + 100 +" [] EmptyStack
+# Eval Parse "10 12 + 100 +" [] EmptyStack
+Eval Parse "10 dup dup dup print" [] EmptyStack
 # Eval [Word!(N 10 N 12 W "+" N 100 W "+")] [] EmptyStack
