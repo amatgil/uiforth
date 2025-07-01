@@ -46,17 +46,11 @@ EvalWord ← (
   [] RunBuiltIn
 )
 # Dict Stack ? Words Dict Stack
-# you might think 'this is a fold but worse' and you'd be right
-# Eval ← ⍢(⊃(⋅⋅∘|⊙∘) ?EvalWord?⊃(⊙⋅⊙∘|⋅∘) ⊃⊢↘₁|±⧻)
 Eval ← |3.2 ∧EvalWord ⊙¤
-
-# Eval map[][] "+" [Val!(N 10 N 20)]
 
 # Words ? Input
 Parse ← ⊜(⍣(Word~N ⋕|Word~W))¬⊸∊" \n" # TODO: Parse strings
 
-# Parse "1 2 + 3 +"
-# Eval [] ⊃⊢↘₁
 EmptyStack ← ↯0_2 []
 Eval Parse "10 12 + 100 +" [] EmptyStack
 # Eval [Word!(N 10 N 12 W "+" N 100 W "+")] [] EmptyStack
