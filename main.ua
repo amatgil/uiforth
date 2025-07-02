@@ -53,12 +53,12 @@ BuiltIns ← {Word!(W"+" W"-" W"*" W"/" W"dup" W"rot" W"-rot" W"print")}
 
 # Userdefs Stack ? Word Userdefs Stack
 EvalWord ← |3.2 (
-  ⍣(?⊸get °Word~W # Run userdef
-    ⍩(∧(⨬(𝄐⌞RunPrimitive?°□˜⊏BuiltIns|◇EvalWord?)>₀⊃±⌵ ?)?)
+  ⍣(⊸get °Word~W # Run userdef
+    ⍩(∧(⨬(𝄐⌞RunPrimitive°□˜⊏BuiltIns|◇EvalWord)>₀⊃±⌵))
   | 𝄐⌞RunPrimitive)
 )
 # Userdefs Stack ? Words Userdefs Stack
-Eval ← ⋅◌⍢(⊙+₁ ⊃(⋅⋅⊙⊙|⊙⊙⋅⋅) EvalWord ⊃(⊙⋅⋅⊙⊙|⋅⊙⊙⋅⋅) ◡˜⊡|<⧻) ⊙0
+Eval ← ⋅◌⍢(+₁ ⊃(⋅⋅⊙⊙|⊙⊙⋅⋅) EvalWord ⊃(⊙⋅⋅⊙⊙|⋅⊙⊙⋅⋅) ◡⊡|>⊙⧻)0
 
 # Words ? Input
 Parse ← ⊜(⍣(Word~N ⋕|Word~W))¬⊸∊" \n" # TODO: Parse strings
@@ -69,5 +69,5 @@ EmptyStack ← ↯0_2 []
 # Eval Parse "10 dup dup dup print" [] EmptyStack
 # : SQUARE dup * ;
 
-Eval ? Parse "3 2 SQUARE" map {"SQUARE"} [[¯4 ¯2]] EmptyStack
+Eval Parse "3 2 SQUARE" map {"SQUARE"} [[¯4 ¯2]] EmptyStack
 # Eval [Word!(N 10 N 12 W "+" N 100 W "+")] [] EmptyStack
