@@ -66,16 +66,11 @@ EvalWord ← |3.2 (
   | ⍩(𝄐⌞RunPrim))
 )
 # Userdefs Stack ? Words Userdefs Stack
-Eval ← ⊙⊙⋅◌ ⍢(⊓EvalWord+₁ ◡⋅⋅⊡|⋅⋅(>⊙⧻)) ⊃(⋅⊙⊙|0 ⊙⋅⋅)
+Eval ← ⊙⊙⋅◌ ⍢(⊓EvalWord+₁ ◡⋅⋅⊡|⋅⋅(>⊙⧻)) ⤚⋅⊙⊙0
 
-# Words ? Input
-Parse ← ⊜(⍣(Word~N ⋕|Word~W))¬⊸∊" \n" # TODO: Parse strings
+# TODO: Parse strings
+Parse ← ⊜(⍣(Word~N ⋕|Word~W))¬⊸∊" \n" # Words ? Input
 
 EmptyStack ← ↯0_2 []
 
-# Eval Parse "10 12 + 100 +" [] EmptyStack
-# Eval Parse "10 dup dup dup print" [] EmptyStack
-# : SQUARE dup * ;
-
 Eval Parse "3 5 SQUARE +" map {"SQUARE"} [¯[⊗ □"dup" BuiltIns ⊗ □"*" BuiltIns]] EmptyStack
-# Eval [Word!(N 10 N 12 W "+" N 100 W "+")] [] EmptyStack
