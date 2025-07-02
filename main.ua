@@ -9,12 +9,12 @@
 #
 # The core is _two_ dictionaries (le gasp!), which are implemented differently.
 # - The first is the "internal dict", which maps words to
-#   internally defined primitives through the RunPrimitive function.
+#   internally defined primitives through the RunPrim function.
 # - The second is the "userdefs dict", is implemented as a uiua `map`
 #   from word to list of integers. These integers are indices to other words,
 #   their sign indicating whether they refer to a primitive (negative)
 #   or to another userdef (positive).
-
+#
 # - Numbers: Since uiua works internally in just floats, I'm going to
 #            simplify the system substantially by making the call that
 #            all numbers are f64s. This removes an entire stack, a
@@ -25,17 +25,19 @@
 #           backslashes mask _those_ out with `find $ \"`
 
 ┌─╴Word
+  # Pre-evaluated
   |N {Num: °0type}    # number (f64)
   |W {Word: °1type}   # identifier for word
   |S {String: °1type} # quoted string
 └─╴
 ┌─╴Val
+  # Post-evaluated
   |N {Num: °0type}    # number (f64)
   |S {String: °1type} # string
 └─╴
 
 # Stack ? Word Stack
-RunPrimitive ← |2 ⍣(
+RunPrim ← |2 ⍣(
   ⍩(⊂Val~N) °(Word~N)
 | ⍩(⊂ ⍜∩°Val~N+ °⊟ ⊃↙↘2) °(Word~W"+") # Primitive nº 0
 | ⍩(⊂ ⍜∩°Val~N- °⊟ ⊃↙↘2) °(Word~W"-") # Primitive nº 1
@@ -54,8 +56,8 @@ BuiltIns ← {Word!(W"+" W"-" W"*" W"/" W"dup" W"rot" W"-rot" W"print")}
 # Userdefs Stack ? Word Userdefs Stack
 EvalWord ← |3.2 (
   ⍣(⊸get °Word~W # Run userdef
-    ⍩(∧(⨬(𝄐⌞RunPrimitive°□˜⊏BuiltIns|◇EvalWord)>₀⊃±⌵))
-  | 𝄐⌞RunPrimitive)
+    ⍩(∧(⨬(𝄐⌞RunPrim°□˜⊏BuiltIns|◇EvalWord)>₀⊃±⌵))
+  | 𝄐⌞RunPrim)
 )
 # Userdefs Stack ? Words Userdefs Stack
 Eval ← ⊙⊙⋅◌ ⍢(⊓EvalWord+₁ ◡⋅⋅⊡|⋅⋅(>⊙⧻)) ⊃(⋅⊙⊙|0 ⊙⋅⋅)
