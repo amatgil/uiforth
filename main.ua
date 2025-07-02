@@ -36,28 +36,34 @@
   |S {String: °1type} # string
 └─╴
 
-# Stack ? Word Stack
-RunPrim ← |2 ⍣(
-  ⍩(⊂Val~N) °(Word~N)
-| ⍩(⊂ ⍜∩°Val~N+ °⊟ ⊃↙↘2) °(Word~W"+") # Primitive nº 0
-| ⍩(⊂ ⍜∩°Val~N- °⊟ ⊃↙↘2) °(Word~W"-") # Primitive nº 1
-| ⍩(⊂ ⍜∩°Val~N× °⊟ ⊃↙↘2) °(Word~W"*") # etc.
-| ⍩(⊂ ⍜∩°Val~N÷ °⊟ ⊃↙↘2) °(Word~W"/")
-| ⍩(⊂⊂. ⊃↙↘1) °(Word~W"dup")
-| ⍩(⊂↻₁ ⊃↙↘3) °(Word~W"rot")
-| ⍩(⊂↻₋₁ ⊃↙↘3) °(Word~W"-rot")
-  # | ⍩(⨬(id| ⍢(↘__1|  ) ) ≍1 °(Word~N) ) °(Word~W"if")
-| ⍩(&p ⍣(°Val~N|°Val~S) ⊃⊢↘₁) °(Word~W"print")
-| ⍤$"Cannot run string: _" ⊙0 °(Word~S)
-| ⍤$"Unrecognized word: _" ⊙0 °(Word~W))
+RunPrimGen! ←^ (
+  ≡◇(⍜°□(▽¬⊸∊" \"") °⊟ ⊜□ ¬⊸⦷ "DEFINEDAS")
+  ⊃($"BuiltIns = _" /◇⊂ ˜⊂"}" ∧(˜⊂$"\"_\" ") ⊙"{"
+  | /◇⊂ ⍚˜$"| ⍩(_) °(Word~W\"_\")"
+    ⊂"⍣(⍩(⊂Val~N) °(Word~N)"
+    ˜⊂ $ | ⍤$"Cannot run string: _" ⊙0 °(Word~S)
+    ˜⊂ $ | ⍤$"Unrecognized word: _" ⊙0 °(Word~W)
+    ˜⊂")"
+    $"RunPrim = _"
+  )
+  $"_\n_"
+)
 
-BuiltIns ← {Word!(W"+" W"-" W"*" W"/" W"dup" W"rot" W"-rot" W"print")}
+RunPrimGen!(
+  "+" DEFINEDAS ⊂ ⍜∩°Val~N+ °⊟ ⊃↙↘2
+| "-" DEFINEDAS ⊂ ⍜∩°Val~N- °⊟ ⊃↙↘2
+| "*" DEFINEDAS ⊂ ⍜∩°Val~N× °⊟ ⊃↙↘2
+| "/" DEFINEDAS ⊂ ⍜∩°Val~N÷ °⊟ ⊃↙↘2
+| "dup" DEFINEDAS ⊂⊂. ⊃↙↘1
+| "rot" DEFINEDAS ⊂↻₁ ⊃↙↘3
+| "-rot" DEFINEDAS ⊂↻₋₁ ⊃↙↘3
+| "print" DEFINEDAS &p ⍣(°Val~N|°Val~S) ⊃⊢↘₁)
 
 # Userdefs Stack ? Word Userdefs Stack
 EvalWord ← |3.2 (
   ⍣(⊸get °Word~W # Run userdef
-    ⍩(∧(⨬(𝄐⌞RunPrim°□˜⊏BuiltIns|◇EvalWord)>₀⊃±⌵))
-  | 𝄐⌞RunPrim)
+    ⍩(∧(⨬(𝄐⌞RunPrim Word~W°□˜⊏BuiltIns|◇EvalWord)>₀⊃±⌵))
+  | ⍩(𝄐⌞RunPrim))
 )
 # Userdefs Stack ? Words Userdefs Stack
 Eval ← ⊙⊙⋅◌ ⍢(⊓EvalWord+₁ ◡⋅⋅⊡|⋅⋅(>⊙⧻)) ⊃(⋅⊙⊙|0 ⊙⋅⋅)
@@ -71,5 +77,5 @@ EmptyStack ← ↯0_2 []
 # Eval Parse "10 dup dup dup print" [] EmptyStack
 # : SQUARE dup * ;
 
-Eval Parse "3 2 SQUARE +" map {"SQUARE"} [[¯4 ¯2]] EmptyStack
+Eval Parse "3 5 SQUARE +" map {"SQUARE"} [¯[⊗ □"dup" BuiltIns ⊗ □"*" BuiltIns]] EmptyStack
 # Eval [Word!(N 10 N 12 W "+" N 100 W "+")] [] EmptyStack
